@@ -9,13 +9,14 @@ public class DrawLine : MonoBehaviour
 
     private EdgeCollider2D _lineCollider;
     private LineRenderer _lineRenderer;
+    private Vector2 _tempFingerPos;
 
     private void Start()
     {
-        
+        UpdateManager.Instance.OnUpdateEvent += InputControl;
     }
 
-    private void Update()
+    private void InputControl()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -24,10 +25,20 @@ public class DrawLine : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Vector2.Distance(tempFingerPos, _fingerPositions[_fingerPositions.Count - 1]) > 0.1f)
+            DrawNewLine();
+        }
+    }
+
+    private void DrawNewLine()
+    {
+        _tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        if (Vector2.Distance(_tempFingerPos, _fingerPositions[_fingerPositions.Count - 1]) > 0.1f)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(_tempFingerPos, Vector2.zero);
+            if (hit.collider != null)
             {
-                UpdateLine(tempFingerPos);
+                UpdateLine(_tempFingerPos);
             }
         }
     }
@@ -40,11 +51,8 @@ public class DrawLine : MonoBehaviour
         _lineCollider = _currentLine.GetComponent<EdgeCollider2D>();
 
         _fingerPositions.Clear();
-        _fingerPositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        _fingerPositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        AddFingerPos();
 
-        _lineRenderer.SetPosition(0, _fingerPositions[0]);
-        _lineRenderer.SetPosition(1, _fingerPositions[1]);
         _lineCollider.points = _fingerPositions.ToArray();
     }
 
@@ -54,5 +62,19 @@ public class DrawLine : MonoBehaviour
         _lineRenderer.positionCount++;
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, newFingerPos);
         _lineCollider.points = _fingerPositions.ToArray();
+    }
+
+    private void AddFingerPos()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            _fingerPositions.Add(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            _lineRenderer.SetPosition(i, _fingerPositions[i]);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        UpdateManager.Instance.OnUpdateEvent -= InputControl;
     }
 }
