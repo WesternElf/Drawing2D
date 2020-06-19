@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LineLenthMeter : MonoBehaviour
+public class LineLengthMeter : MonoBehaviour
 {
     private Image _lineLengthImg;
 

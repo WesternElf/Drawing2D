@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 1142211926}
   - component: {fileID: 1142211928}
   m_Layer: 5
-  m_Name: DrawLineLenth
+  m_Name: DrawLineLength
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -652,7 +652,7 @@ MonoBehaviour:
   _linePrefab: {fileID: 8405169906381880251, guid: 812ec40784e9be249a7cddee5133ce37,
     type: 3}
   _currentLine: {fileID: 0}
-  _maxLineLenth: 10
+  _maxLineLength: 10
   _fingerPositions: []
 --- !u!4 &1768102111
 Transform:
