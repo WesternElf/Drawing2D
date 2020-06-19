@@ -1,15 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawLine : MonoBehaviour
 {
+    public event Action OnDrawStarted;
+    private static DrawLine _instance;
+
     [SerializeField] private GameObject _linePrefab;
     [SerializeField] private GameObject _currentLine;
+    [SerializeField] private float _maxLineLength;
     [SerializeField] private List<Vector2> _fingerPositions;
 
     private EdgeCollider2D _lineCollider;
     private LineRenderer _lineRenderer;
     private Vector2 _tempFingerPos;
+    private float _lineLength;
+    private int _currentPoint;
+
+    public float LineLength => _lineLength;
+    public float MaxLineLength => _maxLineLength;
+    public static DrawLine Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<DrawLine>();
+            }
+
+            if (_instance == null)
+            {
+                _instance = new GameObject("DrawLine", typeof(DrawLine)).GetComponent<DrawLine>();
+            }
+
+            return _instance;
+        }
+    }
 
     private void Start()
     {
@@ -18,14 +45,23 @@ public class DrawLine : MonoBehaviour
 
     private void InputControl()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (_lineLength <= _maxLineLength)
         {
-            CreateLine();
+            if (Input.GetMouseButtonDown(0))
+            {
+                CreateLine();
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                OnDrawStarted?.Invoke();
+                DrawNewLine();
+            }
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            DrawNewLine();
+            _lineLength = 0f;
         }
     }
 
@@ -54,6 +90,7 @@ public class DrawLine : MonoBehaviour
         AddFingerPos();
 
         _lineCollider.points = _fingerPositions.ToArray();
+        _currentPoint = 2;
     }
 
     private void UpdateLine(Vector2 newFingerPos)
@@ -62,6 +99,8 @@ public class DrawLine : MonoBehaviour
         _lineRenderer.positionCount++;
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, newFingerPos);
         _lineCollider.points = _fingerPositions.ToArray();
+
+        _lineLength += Vector2.Distance(_fingerPositions[_currentPoint], _fingerPositions[_currentPoint - 1]);
     }
 
     private void AddFingerPos()
