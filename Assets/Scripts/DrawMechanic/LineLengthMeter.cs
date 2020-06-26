@@ -16,7 +16,7 @@ public class LineLengthMeter : MonoBehaviour
         _lineLengthImg.fillAmount = 1 - (DrawLine.Instance.LineLength / DrawLine.Instance.MaxLineLength);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         DrawLine.Instance.OnDrawStarted -= UpdateLength;
     }

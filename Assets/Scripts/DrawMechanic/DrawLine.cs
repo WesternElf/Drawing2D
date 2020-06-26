@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Extensions;
 using UnityEngine;
 
 public class DrawLine : MonoBehaviour
@@ -82,10 +83,12 @@ public class DrawLine : MonoBehaviour
     private void CreateLine()
     {
         _currentLine = Instantiate(_linePrefab, Vector3.zero, Quaternion.identity);
+        _currentLine.RemoveCloneFromName();
+        
 
         _lineRenderer = _currentLine.GetComponent<LineRenderer>();
         _lineCollider = _currentLine.GetComponent<EdgeCollider2D>();
-
+        
         _fingerPositions.Clear();
         AddFingerPos();
 
@@ -112,7 +115,7 @@ public class DrawLine : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         UpdateManager.Instance.OnUpdateEvent -= InputControl;
     }
