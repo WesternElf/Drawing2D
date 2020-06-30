@@ -46,17 +46,20 @@ public class DrawLine : MonoBehaviour
 
     private void InputControl()
     {
-        if (_lineLength <= _maxLineLength)
+        if (!UITouchHandler.IsPointerOverUIElement())
         {
-            if (Input.GetMouseButtonDown(0))
+            if (_lineLength <= _maxLineLength)
             {
-                CreateLine();
-            }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    CreateLine();
+                }
 
-            if (Input.GetMouseButton(0))
-            {
-                OnDrawStarted?.Invoke();
-                DrawNewLine();
+                if (Input.GetMouseButton(0))
+                {
+                    OnDrawStarted?.Invoke();
+                    DrawNewLine();
+                }
             }
         }
 
