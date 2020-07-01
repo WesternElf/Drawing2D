@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-
     private static GameController _instance;
+    private bool trackMouse = false;
     [SerializeField] private GameObject drawController;
 
     public static GameController Instance
@@ -25,12 +23,6 @@ public class GameController : MonoBehaviour
             return _instance;
         }
     }
-
-    private void Start()
-    {
-
-    }
-
 
 
     public void ChangeNewColor(Color color)

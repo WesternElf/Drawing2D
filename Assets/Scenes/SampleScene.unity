@@ -776,6 +776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373992918}
   - component: {fileID: 1373992917}
+  - component: {fileID: 1373992919}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -810,6 +811,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1373992919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373992916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d0add476155b14d8a1defbd1a61dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMouseDistance: 500
 --- !u!1 &1768102109
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,8 +856,9 @@ MonoBehaviour:
   _linePrefab: {fileID: 8405169906381880251, guid: 812ec40784e9be249a7cddee5133ce37,
     type: 3}
   _currentLine: {fileID: 0}
-  _maxLineLength: 10
+  _maxLineLength: 500
   _fingerPositions: []
+  LineLength: 0
 --- !u!4 &1768102111
 Transform:
   m_ObjectHideFlags: 0

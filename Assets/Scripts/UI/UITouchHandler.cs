@@ -8,7 +8,7 @@ public class UITouchHandler : MonoBehaviour
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());
     }
-    ///Returns 'true' if we touched or hovering on Unity UI element.
+
     private static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
     {
         for (int index = 0; index < eventSystemRaysastResults.Count; index++)
@@ -19,7 +19,7 @@ public class UITouchHandler : MonoBehaviour
         }
         return false;
     }
-    ///Gets all event systen raycast results of current mouse or touch position.
+
     private static List<RaycastResult> GetEventSystemRaycastResults()
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
