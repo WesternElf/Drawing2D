@@ -16,9 +16,22 @@ public class DrawLine : MonoBehaviour
     private void Start()
     {
         UpdateManager.Instance.OnUpdateEvent += InputControl;
+
     }
 
     private void InputControl()
+    {
+        if (GameController.Instance.State == DrawState.Draw)
+        {
+            DrawLines();
+        }
+        else if (GameController.Instance.State == DrawState.Erasure)
+        {
+            ErasureLines();
+        }
+    }
+
+    private void DrawLines()
     {
         if (!UITouchHandler.IsPointerOverUIElement())
         {
@@ -34,6 +47,21 @@ public class DrawLine : MonoBehaviour
                     DrawNewLine();
                 }
             }
+        }
+    }
+
+    private void ErasureLines()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
+            if (hit.collider.name != "Background")
+            {
+                Destroy(hit.collider.gameObject);
+                print(hit.collider);
+            }
+              
         }
     }
 

@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
+public enum DrawState
+{
+    Draw, Erasure
+}
+
 
 public class GameController : MonoBehaviour
 {
+    public Action OnStateChanged;
     private static GameController _instance;
-    private bool trackMouse = false;
-    [SerializeField] private GameObject drawController;
+    private DrawState state;
 
     public static GameController Instance
     {
@@ -24,6 +31,22 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public DrawState State
+    {
+        get { return state; }
+        set { state = value; }
+
+    }
+
+    private void Start()
+    {
+        EraserToggle.OnToggleClicked += ChangeDrawState;
+    }
+
+    private void ChangeDrawState()
+    {
+        OnStateChanged?.Invoke();
+    }
 
     public void ChangeNewColor(Color color)
     {
