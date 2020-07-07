@@ -8,16 +8,20 @@ public class LineLengthMeter : MonoBehaviour
     private void Start()
     {
         _lineLengthImg = gameObject.GetComponent<Image>();
-        CalculateMousePos.Instance.OnDrawStarted += UpdateLength;
+        InputControl.Instance.OnDrawStarted += UpdateLength;
     }
 
     private void UpdateLength()
     {
-        _lineLengthImg.fillAmount = 1 - (CalculateMousePos.Instance.MouseDistance / CalculateMousePos.Instance.MaxMouseDistance);
+        if (GameController.Instance.State == DrawState.Draw)
+        {
+            _lineLengthImg.fillAmount = 1 - (InputControl.Instance.MouseDistance / InputControl.Instance.MaxMouseDistance);
+        }
+       
     }
 
     private void OnDisable()
     {
-        CalculateMousePos.Instance.OnDrawStarted -= UpdateLength;
+        InputControl.Instance.OnDrawStarted -= UpdateLength;
     }
 }

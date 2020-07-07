@@ -15,15 +15,22 @@ public class DrawLine : MonoBehaviour
     
     private void Start()
     {
-        UpdateManager.Instance.OnUpdateEvent += InputControl;
+        InputControl.OnTouchMoved += StateControl;
+        InputControl.OnTouchBegan += CreateLine;
 
     }
 
-    private void InputControl()
+    private void StateControl()
     {
         if (GameController.Instance.State == DrawState.Draw)
         {
-            DrawLines();
+            if (!UITouchHandler.IsPointerOverUIElement())
+            {
+                if (InputControl.Instance.MouseDistance < InputControl.Instance.MaxMouseDistance)
+                {
+                    DrawNewLine();
+                }
+            }
         }
         else if (GameController.Instance.State == DrawState.Erasure)
         {
@@ -31,38 +38,50 @@ public class DrawLine : MonoBehaviour
         }
     }
 
-    private void DrawLines()
-    {
-        if (!UITouchHandler.IsPointerOverUIElement())
-        {
-            if (CalculateMousePos.Instance.MouseDistance < CalculateMousePos.Instance.MaxMouseDistance)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    CreateLine();
-                }
+    //private void DrawLines()
+    //{
+    //    if (!UITouchHandler.IsPointerOverUIElement())
+    //    {
+    //        if (CalculateMousePos.Instance.MouseDistance < CalculateMousePos.Instance.MaxMouseDistance)
+    //        {
+    //            if (Input.touchCount > 0)
+    //            {
+    //                Touch touch = Input.GetTouch(0);
 
-                if (Input.GetMouseButton(0))
-                {
-                    DrawNewLine();
-                }
-            }
-        }
-    }
+    //                if (touch.phase == TouchPhase.Moved)
+    //                {
+    //                    DrawNewLine();
+
+    //                }
+
+    //                if (touch.phase == TouchPhase.Began)
+    //                {
+    //                    CreateLine();
+    //                }
+    //            }
+    //            //if (Input.GetButtonDown("Fire1"))
+    //            //{
+    //            //    CreateLine();
+    //            //}
+
+    //            //if (Input.GetButton("Fire1"))
+    //            //{
+    //            //    DrawNewLine();
+    //            //}
+    //        }
+    //    }
+    //}
 
     private void ErasureLines()
     {
-        if (Input.GetMouseButton(0))
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
+        if (hit.collider.name != "Background")
         {
-            var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-            if (hit.collider.name != "Background")
-            {
-                Destroy(hit.collider.gameObject);
-                print(hit.collider);
-            }
-              
+            Destroy(hit.collider.gameObject);
+            print(hit.collider);
         }
+
     }
 
     private void DrawNewLine()
@@ -81,18 +100,29 @@ public class DrawLine : MonoBehaviour
 
     private void CreateLine()
     {
-        _currentLine = Instantiate(_linePrefab, Vector3.zero, Quaternion.identity);
-        _currentLine.RemoveCloneFromName();
-        
+        if (GameController.Instance.State == DrawState.Draw)
+        {
+            if (!UITouchHandler.IsPointerOverUIElement())
+            {
+                _currentLine = Instantiate(_linePrefab, Vector3.zero, Quaternion.identity);
+                _currentLine.RemoveCloneFromName();
 
-        _lineRenderer = _currentLine.GetComponent<LineRenderer>();
-        _lineCollider = _currentLine.GetComponent<EdgeCollider2D>();
-        
-        _fingerPositions.Clear();
-        AddFingerPos();
 
-        _lineCollider.points = _fingerPositions.ToArray();
-        _currentPoint = 2;
+                _lineRenderer = _currentLine.GetComponent<LineRenderer>();
+                _lineCollider = _currentLine.GetComponent<EdgeCollider2D>();
+
+                _fingerPositions.Clear();
+                AddFingerPos();
+
+                _lineCollider.points = _fingerPositions.ToArray();
+                _currentPoint = 2;
+            }
+        }
+        else
+        {
+            return;
+        }
+       
     }
 
     private void UpdateLine(Vector2 newFingerPos)
@@ -112,8 +142,8 @@ public class DrawLine : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        UpdateManager.Instance.OnUpdateEvent -= InputControl;
-    }
+    //private void OnDisable()
+    //{
+    //    UpdateManager.Instance.OnUpdateEvent -= InputControl;
+    //}
 }
