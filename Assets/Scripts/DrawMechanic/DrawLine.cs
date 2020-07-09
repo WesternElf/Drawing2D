@@ -15,9 +15,9 @@ public class DrawLine : MonoBehaviour
     
     private void Start()
     {
-        InputControl.OnTouchMoved += StateControl;
-        InputControl.OnTouchBegan += CreateLine;
-
+        //InputControl.OnTouchMoved += StateControl;
+        //InputControl.OnTouchBegan += CreateLine;
+        UpdateManager.Instance.OnUpdateEvent += DrawLines;
     }
 
     private void StateControl()
@@ -38,39 +38,40 @@ public class DrawLine : MonoBehaviour
         }
     }
 
-    //private void DrawLines()
-    //{
-    //    if (!UITouchHandler.IsPointerOverUIElement())
-    //    {
-    //        if (CalculateMousePos.Instance.MouseDistance < CalculateMousePos.Instance.MaxMouseDistance)
-    //        {
-    //            if (Input.touchCount > 0)
-    //            {
-    //                Touch touch = Input.GetTouch(0);
+    private void DrawLines()
+    {
+        if (!UITouchHandler.IsPointerOverUIElement())
+        {
 
-    //                if (touch.phase == TouchPhase.Moved)
-    //                {
-    //                    DrawNewLine();
+            //if (CalculateMousePos.Instance.MouseDistance < CalculateMousePos.Instance.MaxMouseDistance)
+            //{
+            //if (Input.touchCount > 0)
+            //{
+            //    Touch touch = Input.GetTouch(0);
 
-    //                }
+            //    if (touch.phase == TouchPhase.Moved)
+            //    {
+            //        DrawNewLine();
 
-    //                if (touch.phase == TouchPhase.Began)
-    //                {
-    //                    CreateLine();
-    //                }
-    //            }
-    //            //if (Input.GetButtonDown("Fire1"))
-    //            //{
-    //            //    CreateLine();
-    //            //}
+            //    }
 
-    //            //if (Input.GetButton("Fire1"))
-    //            //{
-    //            //    DrawNewLine();
-    //            //}
-    //        }
-    //    }
-    //}
+            //    if (touch.phase == TouchPhase.Began)
+            //    {
+            //        CreateLine();
+            //    }
+            //}
+            if (Input.GetButtonDown("Fire1"))
+            {
+                CreateLine();
+            }
+
+            if (Input.GetButton("Fire1"))
+            {
+                DrawNewLine();
+            }
+      
+    }
+    }
 
     private void ErasureLines()
     {

@@ -8,9 +8,10 @@ public class DamagerMovement : MonoBehaviour
     private void Start()
     {
         _objTransform = gameObject.GetComponent<Transform>();
+        UpdateManager.Instance.OnUpdateEvent += SawRotate;
     }
 
-    private void Update()
+    private void SawRotate()
     {
         _objTransform.Rotate(new Vector3(0f, 0f, -1f) * _rotateSpeed);
     }
