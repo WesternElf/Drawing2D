@@ -1,10 +1,12 @@
-﻿using Extensions;
+﻿using System;
+using Extensions;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _startScreen;
     private static UIManager _instance;
+    public event Action OnCoinCountChanged;
 
     public static UIManager Instance
     {
@@ -27,6 +29,12 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         ColorButton.OnColorChoosedEvent += ColorPanel;
+        Coin.OnPickedUp += CoinCountChanging;
+    }
+
+    private void CoinCountChanging()
+    {
+        OnCoinCountChanged?.Invoke();
     }
 
     private void ColorPanel()
@@ -44,5 +52,6 @@ public class UIManager : MonoBehaviour
     private void OnDestroy()
     {
         ColorButton.OnColorChoosedEvent -= ColorPanel;
+        Coin.OnPickedUp -= CoinCountChanging;
     }
 }

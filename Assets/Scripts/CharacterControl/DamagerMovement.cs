@@ -15,4 +15,9 @@ public class DamagerMovement : MonoBehaviour
     {
         _objTransform.Rotate(new Vector3(0f, 0f, -1f) * _rotateSpeed);
     }
+
+    private void OnDestroy()
+    {
+        UpdateManager.Instance.OnUpdateEvent -= SawRotate;
+    }
 }
