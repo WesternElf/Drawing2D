@@ -1,32 +1,36 @@
 ﻿using System;
 using UnityEngine;
 
-public class UpdateManager : MonoBehaviour
+namespace GameControl
 {
-    public event Action OnUpdateEvent;
-
-    private static UpdateManager _instance;
-
-    public static UpdateManager Instance
+    public class UpdateManager : MonoBehaviour
     {
-        get
+        public event Action OnUpdateEvent;
+
+        private static UpdateManager _instance;
+
+        public static UpdateManager Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = FindObjectOfType<UpdateManager>();
-            }
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<UpdateManager>();
+                }
 
-            if (_instance == null)
-            {
-                _instance = new GameObject("UpdateManager", typeof(UpdateManager)).GetComponent<UpdateManager>();
-            }
+                if (_instance == null)
+                {
+                    _instance = new GameObject("UpdateManager", typeof(UpdateManager)).GetComponent<UpdateManager>();
+                }
 
-            return _instance;
+                return _instance;
+            }
+        }
+
+        private void Update()
+        {
+            OnUpdateEvent?.Invoke();
         }
     }
-
-    private void Update()
-    {
-        OnUpdateEvent?.Invoke();
-    }
 }
+

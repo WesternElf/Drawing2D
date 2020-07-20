@@ -1,11 +1,15 @@
 ﻿using System;
 
-public class BrushButton : BaseButton
+namespace UserInterface.Buttons
 {
-    public static event Action OnBrushClickedEvent;
-
-    public override void ChoosedButton()
+    public class BrushButton : BaseButton
     {
-        OnBrushClickedEvent?.Invoke();
+        public static event Action OnBrushClickedEvent;
+
+        public override void ChoosedButton()
+        {
+            OnBrushClickedEvent?.Invoke();
+        }
     }
 }
+

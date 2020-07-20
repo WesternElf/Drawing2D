@@ -1,23 +1,26 @@
 ﻿using System;
 using UnityEngine;
+using CharacterControl;
 
-public class Coin : MonoBehaviour
+namespace CoinPool
 {
-    public static event Action OnPickedUp;
-
-    private void OnTriggerEnter2D(Collider2D other)
+    public class Coin : MonoBehaviour
     {
-        if (other.TryGetComponent(out Mover knight))
+        public static event Action OnPickedUp;
+
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            CoinPicked();
+            if (other.TryGetComponent(out KnightController knight))
+            {
+                CoinPicked();
+            }
+        }
+
+        private void CoinPicked()
+        {
+            OnPickedUp?.Invoke();
+            gameObject.GetComponent<PoolableObject>().ReturnToPool(this.gameObject);
         }
     }
-
-    private void CoinPicked()
-    {
-        OnPickedUp?.Invoke();
-        gameObject.GetComponent<PoolableObject>().ReturnToPool(this.gameObject);
-    }
-
-
 }
+

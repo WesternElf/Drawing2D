@@ -2,30 +2,34 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UITouchHandler : MonoBehaviour
+namespace UserInterface
 {
-    public static bool IsPointerOverUIElement()
+    public class UITouchHandler : MonoBehaviour
     {
-        return IsPointerOverUIElement(GetEventSystemRaycastResults());
-    }
-
-    private static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
-    {
-        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        public static bool IsPointerOverUIElement()
         {
-            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
-            if (curRaysastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
-            return true;
+            return IsPointerOverUIElement(GetEventSystemRaycastResults());
         }
-        return false;
-    }
 
-    private static List<RaycastResult> GetEventSystemRaycastResults()
-    {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
-        List<RaycastResult> raysastResults = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, raysastResults);
-        return raysastResults;
+        private static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+        {
+            for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+            {
+                RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+                if (curRaysastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
+                    return true;
+            }
+            return false;
+        }
+
+        private static List<RaycastResult> GetEventSystemRaycastResults()
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> raysastResults = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, raysastResults);
+            return raysastResults;
+        }
     }
 }
+

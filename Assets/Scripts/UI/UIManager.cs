@@ -1,57 +1,64 @@
 ﻿using System;
+using CoinPool;
 using Extensions;
+using GameControl;
 using UnityEngine;
+using UserInterface.Buttons;
 
-public class UIManager : MonoBehaviour
+namespace UserInterface
 {
-    [SerializeField] private GameObject _startScreen;
-    private static UIManager _instance;
-    public event Action OnCoinCountChanged;
-
-    public static UIManager Instance
+    public class UIManager : MonoBehaviour
     {
-        get
+        [SerializeField] private GameObject _startScreen;
+        private static UIManager _instance;
+        public event Action OnCoinCountChanged;
+
+        public static UIManager Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = FindObjectOfType<UIManager>();
-            }
+                if (_instance == null)
+                {
+                    _instance = FindObjectOfType<UIManager>();
+                }
 
-            if (_instance == null)
-            {
-                _instance = new GameObject("UIManager", typeof(UIManager)).GetComponent<UIManager>();
-            }
+                if (_instance == null)
+                {
+                    _instance = new GameObject("UIManager", typeof(UIManager)).GetComponent<UIManager>();
+                }
 
-            return _instance;
+                return _instance;
+            }
+        }
+
+        private void Start()
+        {
+            ColorButton.OnColorChoosedEvent += ColorPanel;
+            Coin.OnPickedUp += CoinCountChanging;
+        }
+
+        private void CoinCountChanging()
+        {
+            OnCoinCountChanged?.Invoke();
+        }
+
+        private void ColorPanel()
+        {
+            GameController.Instance.ChangeNewColor(ColorButton.ButtonColor);
+        }
+
+        public void InstantiateScreen(GameObject screen)
+        {
+            var startScreen = Instantiate(screen, gameObject.transform);
+            startScreen.transform.parent = transform;
+            startScreen.RemoveCloneFromName();
+        }
+
+        private void OnDestroy()
+        {
+            ColorButton.OnColorChoosedEvent -= ColorPanel;
+            Coin.OnPickedUp -= CoinCountChanging;
         }
     }
 
-    private void Start()
-    {
-        ColorButton.OnColorChoosedEvent += ColorPanel;
-        Coin.OnPickedUp += CoinCountChanging;
-    }
-
-    private void CoinCountChanging()
-    {
-        OnCoinCountChanged?.Invoke();
-    }
-
-    private void ColorPanel()
-    {
-        GameController.Instance.ChangeNewColor(ColorButton.ButtonColor);
-    }
-
-    public void InstantiateScreen(GameObject screen)
-    {
-        var startScreen = Instantiate(screen, gameObject.transform);
-        startScreen.transform.parent = transform;
-        startScreen.RemoveCloneFromName();
-    }
-
-    private void OnDestroy()
-    {
-        ColorButton.OnColorChoosedEvent -= ColorPanel;
-        Coin.OnPickedUp -= CoinCountChanging;
-    }
 }

@@ -2,20 +2,24 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ColorButton : BaseButton
+namespace UserInterface.Buttons
 {
-    public static Color ButtonColor;
-    public static event Action OnColorChoosedEvent;
-
-    public override void ChoosedButton()
+    public class ColorButton : BaseButton
     {
-        ButtonColor = GetColor();
-        OnColorChoosedEvent?.Invoke();
-    }
+        public static Color ButtonColor;
+        public static event Action OnColorChoosedEvent;
 
-    private Color GetColor()
-    {
-        var color = gameObject.GetComponent<Image>().color;
-        return color;
+        public override void ChoosedButton()
+        {
+            ButtonColor = GetColor();
+            OnColorChoosedEvent?.Invoke();
+        }
+
+        private Color GetColor()
+        {
+            var color = gameObject.GetComponent<Image>().color;
+            return color;
+        }
     }
 }
+

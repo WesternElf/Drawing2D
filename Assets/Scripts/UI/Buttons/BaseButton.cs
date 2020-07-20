@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class BaseButton : MonoBehaviour
+namespace UserInterface.Buttons
 {
-    private Button _button;
-
-    private void Awake()
+    public class BaseButton : MonoBehaviour
     {
-        _button = gameObject.GetComponent<Button>();
-        _button.onClick.AddListener(ChoosedButton);
-    }
+        private Button _button;
 
-    public virtual void ChoosedButton()
-    {
-        print("Click");
+        private void Awake()
+        {
+            _button = gameObject.GetComponent<Button>();
+            _button.onClick.AddListener(ChoosedButton);
+        }
+
+        public virtual void ChoosedButton()
+        {
+            print("Click");
+        }
     }
 
 }

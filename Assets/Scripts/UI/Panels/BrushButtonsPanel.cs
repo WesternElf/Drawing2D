@@ -1,46 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using GameControl;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UserInterface.Buttons;
 
-public class BrushButtonsPanel : MonoBehaviour
+namespace UserInterface.Panels
 {
-    [SerializeField] private List<GameObject> _brushPanels;
-
-
-    private void Start()
+    public class BrushButtonsPanel : MonoBehaviour
     {
-        BrushButton.OnBrushClickedEvent += ActivationPanel;
-        EraserToggle.OnToggleClicked += ChangeDrawState;
-    }
+        [SerializeField] private List<GameObject> _brushPanels;
 
-    private void ActivationPanel()
-    {
-        for (int i = 0; i < _brushPanels.Count; i++)
+        private void Start()
         {
-            if (!_brushPanels[i].activeInHierarchy)
+            BrushButton.OnBrushClickedEvent += ActivationPanel;
+            EraserToggle.OnToggleClicked += ChangeDrawState;
+        }
+
+        private void ActivationPanel()
+        {
+            for (int i = 0; i < _brushPanels.Count; i++)
             {
-                _brushPanels[i].SetActive(true);
+                if (!_brushPanels[i].activeInHierarchy)
+                {
+                    _brushPanels[i].SetActive(true);
+                }
             }
         }
-    }
 
-    private void ChangeDrawState()
-    {
-        if (GameController.Instance.State == DrawState.Draw)
+        private void ChangeDrawState()
         {
-            GameController.Instance.State = DrawState.Erasure;
+            if (GameController.Instance.State == DrawState.Draw)
+            {
+                GameController.Instance.State = DrawState.Erasure;
+            }
+            else
+            {
+                GameController.Instance.State = DrawState.Draw;
+            }
+
         }
-        else
+
+        private void OnDestroy()
         {
-            GameController.Instance.State = DrawState.Draw;
+            BrushButton.OnBrushClickedEvent -= ActivationPanel;
+            EraserToggle.OnToggleClicked -= ChangeDrawState;
         }
 
     }
-
-    private void OnDestroy()
-    {
-        BrushButton.OnBrushClickedEvent -= ActivationPanel;
-        EraserToggle.OnToggleClicked -= ChangeDrawState;
-    }
-
 }
+

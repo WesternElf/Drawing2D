@@ -2,65 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinSpawner : MonoBehaviour
+namespace CoinPool
 {
-    [SerializeField] private int objectsCount;
-    [SerializeField] private List<Transform> _points;
-    [SerializeField] private GameObject _coinPrefab;
-    [SerializeField] private float delay;
-
-    private CoinPooler _pool;
-    private Transform _randomPoint;
-
-    private void Start()
+    public class CoinSpawner : MonoBehaviour
     {
-        Initialize();
-        StartCoroutine(Spawner());
-    }
+        [SerializeField] private int objectsCount;
+        [SerializeField] private List<GameObject> _points;
+        [SerializeField] private GameObject _coinPrefab;
+        [SerializeField] private float delay;
 
-    public void Initialize()
-    {
-        _pool = new CoinPooler(_coinPrefab, objectsCount);
-    }
+        private CoinPooler _pool;
+        private Transform _randomPoint;
 
-    public IEnumerator Spawner()
-    {
-        while (true)
+        private void Start()
         {
-            SpawnObject(_pool);
-            yield return new WaitForSeconds(delay);
+            Coin.OnPickedUp += SetActivePoint;
+            _pool = new CoinPooler(_coinPrefab, objectsCount);
+
+            StartCoroutine(Spawner());
         }
-    }
 
-    private void SpawnObject(CoinPooler pool)
-    {
-        var pooledObject = pool.GetObject();
-        var randomPoint = GetRandomPoint();
-        pooledObject.transform.position = randomPoint.position;
-        pooledObject.transform.rotation = randomPoint.rotation;
-        pooledObject.SetActive(true);
-    }
-
-    private Transform GetRandomPoint()
-    {
-        var newPoint = _points[Random.Range(0, _points.Count)];
-
-        if (_points.Count > 1)
+        private IEnumerator Spawner()
         {
-            if (_randomPoint != newPoint)
+            while (IsAllPointsInactive() == true)
             {
-                _randomPoint = newPoint;
+                SpawnObject(_pool);
+                yield return new WaitForSeconds(delay);
             }
+        }
+
+        private void SpawnObject(CoinPooler pool)
+        {
+            var pooledObject = pool.GetObject();
+            var randomPoint = GetRandomPoint();
+            pooledObject.transform.position = randomPoint.position;
+            pooledObject.transform.rotation = randomPoint.rotation;
+            pooledObject.SetActive(true);
+        }
+
+
+        private Transform GetRandomPoint()
+        {
+            var newPoint = GetPoint();
+            var newTransformPoint = newPoint.GetComponent<Transform>();
+
+            //var newPoint = _pointsTransform[Random.Range(0, _points.Count)];
+
+            if (newPoint.activeInHierarchy)
+            {
+                if (_randomPoint != newTransformPoint)
+                {
+                    _randomPoint = newTransformPoint;
+                    newPoint.SetActive(false);
+                }
+            }
+
             else
-            {
                 return GetRandomPoint();
-            }
+
+            return newTransformPoint;
         }
-        else
+
+
+        private bool IsAllPointsInactive()
         {
-            newPoint = _points[0];
+            print("check");
+            foreach (var point in _points)
+            {
+                if (point.activeInHierarchy == true)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
-        return newPoint;
+
+        private void SetActivePoint()
+        {
+            GetPoint().SetActive(true);
+        }
+
+        private GameObject GetPoint()
+        {
+            return _points[Random.Range(0, _points.Count)];
+        }
+
+        private void OnDestroy()
+        {
+            Coin.OnPickedUp -= SetActivePoint;
+        }
     }
 }
+
 

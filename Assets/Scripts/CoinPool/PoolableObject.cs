@@ -1,16 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class PoolableObject : MonoBehaviour
+namespace CoinPool
 {
-    private CoinPooler _pooler;
-
-    public void SetPool(CoinPooler pooler)
+    public class PoolableObject : MonoBehaviour
     {
-        _pooler = pooler;
-    }
+        private CoinPooler _pooler;
 
-    public void ReturnToPool(GameObject coin)
-    {
-        _pooler.ReturnGameObject(coin);
+        public void SetPool(CoinPooler pooler)
+        {
+            _pooler = pooler;
+        }
+
+        public void ReturnToPool(GameObject coin)
+        {
+            _pooler.ReturnGameObject(coin);
+        }
     }
 }
+
