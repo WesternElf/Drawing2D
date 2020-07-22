@@ -1,9 +1,10 @@
 ﻿using GameControl;
+using System;
 using UnityEngine;
 
 namespace CharacterControl
 {
-    public class DamagerMovement : MonoBehaviour
+    public class InteractionMovement : MonoBehaviour
     {
         [SerializeField] private float _rotateSpeed;
         private Transform _objTransform;
@@ -17,6 +18,19 @@ namespace CharacterControl
         private void SawRotate()
         {
             _objTransform.Rotate(new Vector3(0f, 0f, -1f) * _rotateSpeed);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.TryGetComponent(out KnightController knight))
+            {
+                PlayerTriggered();
+            }
+        }
+
+        protected virtual void PlayerTriggered()
+        {
+            return;
         }
 
         private void OnDestroy()

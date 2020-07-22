@@ -66,7 +66,6 @@ namespace CoinPool
 
         private bool IsAllPointsInactive()
         {
-            print("check");
             foreach (var point in _points)
             {
                 if (point.activeInHierarchy == true)
