@@ -16,7 +16,7 @@ namespace DrawMechanic
 
         private void UpdateLength()
         {
-            if (GameController.Instance.State == DrawState.Draw)
+            if (GameController.Instance.DrawState == DrawState.Draw)
             {
                 _lineLengthImg.fillAmount = 1 - (InputControl.Instance.MouseDistance / InputControl.Instance.MaxMouseDistance);
             }

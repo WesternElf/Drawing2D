@@ -1,10 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using UserInterface;
 using UserInterface.Buttons;
 
 public enum DrawState
 {
     Draw, Erasure
+}
+
+public enum GameState
+{
+    Play, Pause
 }
 
 namespace GameControl
@@ -13,7 +19,8 @@ namespace GameControl
     {
         public Action OnStateChanged;
         private static GameController _instance;
-        private DrawState state;
+        private DrawState _drawState;
+        private GameState _gameState;
 
         public static GameController Instance
         {
@@ -33,17 +40,38 @@ namespace GameControl
             }
         }
 
-        public DrawState State
+        public GameState GameState
         {
-            get { return state; }
-            set { state = value; }
+            get { return _gameState; }
+            set
+            {
+                if (value == GameState.Play)
+                {
+                    Time.timeScale = 1.0f;
+                    UIManager.Instance.ActivatingButtons(true);
+                    
+                }
+                else
+                {
+                    Time.timeScale = 0.0f;
+                    UIManager.Instance.ActivatingButtons(false);
+                    DrawState = DrawState.Draw;
+                }
 
+                _gameState = value;
+            }
         }
+
+        public DrawState DrawState { get => _drawState; internal set => _drawState = value; }
 
         private void Start()
         {
+            DontDestroyOnLoad(this);
+            //GameState = GameState.Play;
             EraserToggle.OnToggleClicked += ChangeDrawState;
+
         }
+
 
         private void ChangeDrawState()
         {
@@ -63,6 +91,11 @@ namespace GameControl
             var lineRenderer = linePrefab.GetComponent<LineRenderer>();
 
             lineRenderer.colorGradient = gradient;
+        }
+
+        private void OnDisabled()
+        {
+            EraserToggle.OnToggleClicked -= ChangeDrawState;
         }
 
     }

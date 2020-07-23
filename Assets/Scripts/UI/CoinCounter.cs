@@ -2,6 +2,7 @@
 using LoadSaveData;
 using UnityEngine;
 using UnityEngine.UI;
+using UserInterface.Buttons;
 
 namespace UserInterface
 {
@@ -16,12 +17,18 @@ namespace UserInterface
         private void Start()
         {
             UIManager.Instance.OnCoinCountChanged += ChangeCoinCount;
-
+            RestartButton.OnGameRestarted += ClearCoinCount;
             _coinCountText = GetComponent<Text>();
 
             Initialize();
         }
 
+        private void ClearCoinCount()
+        {
+            _coinParam.CoinCount = 0f;
+            ShowCoinChange(_coinParam.CoinCount);
+
+        }
 
         private void Initialize()
         {
@@ -42,6 +49,11 @@ namespace UserInterface
         private void ChangeCoinCount()
         {
             _coinParam.CoinCount++;
+            ShowCoinChange(_coinParam.CoinCount);
+        }
+
+        private void ShowCoinChange(float coins)
+        {
             _coinCountText.text = _coinParam.CoinCount.ToString();
             LoadSaveToJSON.SaveParams(_coinParam);
         }

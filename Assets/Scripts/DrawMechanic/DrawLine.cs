@@ -26,7 +26,7 @@ namespace DrawMechanic
 
         private void StateControl()
         {
-            if (GameController.Instance.State == DrawState.Draw)
+            if (GameController.Instance.DrawState == DrawState.Draw )
             {
                 if (!UITouchHandler.IsPointerOverUIElement())
                 {
@@ -36,7 +36,7 @@ namespace DrawMechanic
                     }
                 }
             }
-            else if (GameController.Instance.State == DrawState.Erasure)
+            else if (GameController.Instance.DrawState == DrawState.Erasure)
             {
                 ErasureLines();
             }
@@ -64,14 +64,17 @@ namespace DrawMechanic
                 //        CreateLine();
                 //    }
                 //}
-                if (Input.GetButtonDown("Fire1"))
+                if (GameController.Instance.GameState == GameState.Play)
                 {
-                    CreateLine();
-                }
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        CreateLine();
+                    }
 
-                if (Input.GetButton("Fire1"))
-                {
-                    DrawNewLine();
+                    if (Input.GetButton("Fire1"))
+                    {
+                        DrawNewLine();
+                    }
                 }
 
             }
@@ -105,7 +108,7 @@ namespace DrawMechanic
 
         private void CreateLine()
         {
-            if (GameController.Instance.State == DrawState.Draw)
+            if (GameController.Instance.DrawState == DrawState.Draw)
             {
                 if (!UITouchHandler.IsPointerOverUIElement())
                 {

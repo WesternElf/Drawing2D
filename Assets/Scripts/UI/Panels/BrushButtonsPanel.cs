@@ -28,13 +28,17 @@ namespace UserInterface.Panels
 
         private void ChangeDrawState()
         {
-            if (GameController.Instance.State == DrawState.Draw)
+            if (GameController.Instance.GameState == GameState.Play)
             {
-                GameController.Instance.State = DrawState.Erasure;
-            }
-            else
-            {
-                GameController.Instance.State = DrawState.Draw;
+                if (GameController.Instance.DrawState == DrawState.Draw)
+                {
+                    GameController.Instance.DrawState = DrawState.Erasure;
+                }
+                else
+                {
+                    GameController.Instance.DrawState = DrawState.Draw;
+                }
+
             }
 
         }

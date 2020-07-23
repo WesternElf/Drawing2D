@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CoinPool;
 using Extensions;
 using GameControl;
@@ -9,7 +10,7 @@ namespace UserInterface
 {
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _startScreen;
+        [SerializeField] private List<GameObject> _gameButtons;
         private static UIManager _instance;
         public event Action OnCoinCountChanged;
 
@@ -37,6 +38,15 @@ namespace UserInterface
             Coin.OnPickedUp += CoinCountChanging;
         }
 
+
+        internal void ActivatingButtons(bool activeStatus)
+        {
+            foreach (var button in _gameButtons)
+            {
+                button.SetActive(activeStatus);
+            }
+        }
+
         private void CoinCountChanging()
         {
             OnCoinCountChanged?.Invoke();
@@ -47,11 +57,16 @@ namespace UserInterface
             GameController.Instance.ChangeNewColor(ColorButton.ButtonColor);
         }
 
-        public void InstantiateScreen(GameObject screen)
+        internal void InstantiateScreen(GameObject screen)
         {
             var startScreen = Instantiate(screen, gameObject.transform);
             startScreen.transform.parent = transform;
             startScreen.RemoveCloneFromName();
+        }
+
+        internal void CloseScreen(GameObject screen)
+        {
+            Destroy(GameObject.Find(screen.name));
         }
 
         private void OnDestroy()
