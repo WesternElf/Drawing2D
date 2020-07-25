@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using CoinPool;
+using LoadSaveData;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UserInterface;
 using UserInterface.Buttons;
 
@@ -18,6 +22,7 @@ namespace GameControl
     public class GameController : MonoBehaviour
     {
         public Action OnStateChanged;
+        public Action OnRestartedGame;
         private static GameController _instance;
         private DrawState _drawState;
         private GameState _gameState;
@@ -66,12 +71,17 @@ namespace GameControl
 
         private void Start()
         {
-            DontDestroyOnLoad(this);
-            //GameState = GameState.Play;
+            //DontDestroyOnLoad(this);
             EraserToggle.OnToggleClicked += ChangeDrawState;
-
         }
 
+        public void RestartGame()
+        {
+            GameState = GameState.Play;
+            SceneManager.LoadScene(0);
+            LoadSaveToJSON.ClearAllData();
+            //OnRestartedGame?.Invoke();
+        }
 
         private void ChangeDrawState()
         {

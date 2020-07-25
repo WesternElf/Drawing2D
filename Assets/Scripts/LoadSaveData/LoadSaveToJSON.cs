@@ -25,9 +25,16 @@ namespace LoadSaveData
             return gameParameters;
         }
 
+        public static void ClearAllData()
+        {
+            GameParameters gameParameters = new GameParameters();
+            SaveParams(gameParameters);
+        }
+
         private static string GetFilePath()
         {
             return Application.persistentDataPath + "/GameSave.json";
         }
+
     }
 }

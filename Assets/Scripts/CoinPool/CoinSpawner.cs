@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameControl;
 using UnityEngine;
 
 namespace CoinPool
@@ -17,9 +18,11 @@ namespace CoinPool
         private void Start()
         {
             Coin.OnPickedUp += SetActivePoint;
+
             _pool = new CoinPooler(_coinPrefab, objectsCount);
 
             StartCoroutine(Spawner());
+            GameController.Instance.OnRestartedGame += ClearPool;
         }
 
         private IEnumerator Spawner()
@@ -28,6 +31,18 @@ namespace CoinPool
             {
                 SpawnObject(_pool);
                 yield return new WaitForSeconds(delay);
+            }
+        }
+
+        private void ClearPool()
+        {
+            Coin[] coins = FindObjectsOfType<Coin>();
+            foreach (var coin in coins)
+            {
+                if (coin.gameObject.activeInHierarchy)
+                {
+                    coin.gameObject.GetComponent<PoolableObject>().ReturnToPool(coin.gameObject);
+                }
             }
         }
 
@@ -45,8 +60,6 @@ namespace CoinPool
         {
             var newPoint = GetPoint();
             var newTransformPoint = newPoint.GetComponent<Transform>();
-
-            //var newPoint = _pointsTransform[Random.Range(0, _points.Count)];
 
             if (newPoint.activeInHierarchy)
             {
@@ -89,6 +102,7 @@ namespace CoinPool
         private void OnDestroy()
         {
             Coin.OnPickedUp -= SetActivePoint;
+            GameController.Instance.OnRestartedGame -= ClearPool;
         }
     }
 }

@@ -17,17 +17,9 @@ namespace UserInterface
         private void Start()
         {
             UIManager.Instance.OnCoinCountChanged += ChangeCoinCount;
-            RestartButton.OnGameRestarted += ClearCoinCount;
             _coinCountText = GetComponent<Text>();
 
             Initialize();
-        }
-
-        private void ClearCoinCount()
-        {
-            _coinParam.CoinCount = 0f;
-            ShowCoinChange(_coinParam.CoinCount);
-
         }
 
         private void Initialize()

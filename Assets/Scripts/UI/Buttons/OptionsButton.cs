@@ -5,7 +5,6 @@ namespace UserInterface.Buttons
 {
     public class OptionsButton : BaseButton
     {
-       
         [SerializeField] private GameObject panelPrefab;
 
         public override void ChoosedButton()

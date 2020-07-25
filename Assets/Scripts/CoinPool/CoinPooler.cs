@@ -22,7 +22,7 @@ namespace CoinPool
             _cachedObjects = new List<GameObject>(initialAmount);
             _objectsParent = new GameObject($"[{prefab.name}Parent]").transform;
             SpawnInitialObjects(initialAmount);
-            Object.DontDestroyOnLoad(_objectsParent.gameObject);
+            //Object.DontDestroyOnLoad(_objectsParent.gameObject);
         }
 
         private void SpawnInitialObjects(int initialAmount)

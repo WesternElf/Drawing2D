@@ -1,11 +1,13 @@
-﻿namespace CharacterControl
+﻿using UserInterface;
+
+namespace CharacterControl
 {
     public class Portal : InteractionMovement
     {
 
         protected override void PlayerTriggered()
         {
-            print("Portal");
+            UIManager.Instance.LoadWinWindow();
         }
     }
 

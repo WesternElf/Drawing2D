@@ -4,6 +4,7 @@ using CoinPool;
 using Extensions;
 using GameControl;
 using UnityEngine;
+using UnityEngine.UI;
 using UserInterface.Buttons;
 
 namespace UserInterface
@@ -11,6 +12,9 @@ namespace UserInterface
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private List<GameObject> _gameButtons;
+        [SerializeField] private GameObject _loseWindow;
+        [SerializeField] private GameObject _winWindow;
+        
         private static UIManager _instance;
         public event Action OnCoinCountChanged;
 
@@ -38,6 +42,17 @@ namespace UserInterface
             Coin.OnPickedUp += CoinCountChanging;
         }
 
+        public void LoadWinWindow()
+        {
+            InstantiateScreen(_winWindow);
+            GameController.Instance.GameState = GameState.Pause;
+        }
+
+        public void LoadLoseWindow()
+        {
+            InstantiateScreen(_loseWindow);
+            GameController.Instance.GameState = GameState.Pause;
+        }
 
         internal void ActivatingButtons(bool activeStatus)
         {
