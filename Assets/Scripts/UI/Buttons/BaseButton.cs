@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameControl;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UserInterface.Buttons
@@ -6,16 +7,23 @@ namespace UserInterface.Buttons
     public class BaseButton : MonoBehaviour
     {
         private Button _button;
+        private const string _audioClip = "ClickSFX";
 
         private void Awake()
         {
             _button = gameObject.GetComponent<Button>();
             _button.onClick.AddListener(ChoosedButton);
+            _button.onClick.AddListener(PlaySound);
         }
 
         public virtual void ChoosedButton()
         {
-            print("Click");
+           
+        }
+
+        private void PlaySound()
+        {
+            GameController.Instance.AudioManager.PlaySound(_audioClip);
         }
     }
 

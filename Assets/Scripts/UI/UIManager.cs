@@ -17,6 +17,8 @@ namespace UserInterface
         
         private static UIManager _instance;
         public event Action OnCoinCountChanged;
+        private const string _winClipName = "Win";
+        private const string _loseClipName = "Lose";
 
         public static UIManager Instance
         {
@@ -44,14 +46,21 @@ namespace UserInterface
 
         public void LoadWinWindow()
         {
-            InstantiateScreen(_winWindow);
-            GameController.Instance.GameState = GameState.Pause;
+            LoadGameFinish(_winWindow, _winClipName);
         }
 
         public void LoadLoseWindow()
         {
-            InstantiateScreen(_loseWindow);
+            LoadGameFinish(_loseWindow, _loseClipName);
+        }
+
+        private void LoadGameFinish(GameObject window, string audioName)
+        {
+            InstantiateScreen(window);
             GameController.Instance.GameState = GameState.Pause;
+            GameController.Instance.AudioManager.StopMusic();
+            GameController.Instance.AudioManager.PlaySound(audioName);
+
         }
 
         internal void ActivatingButtons(bool activeStatus)

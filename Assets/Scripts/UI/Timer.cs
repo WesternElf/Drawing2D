@@ -12,6 +12,7 @@ namespace UserInterface
         private Text _timerText;
         private float timeCount;
         private const float startValue = 60f;
+        private const string _clipName = "Timer";
 
         private void Start()
         {
@@ -34,6 +35,10 @@ namespace UserInterface
                 yield return new WaitForSeconds(1f);
                 timeCount--;
                 _timerText.text = timeCount.ToString();
+                if (timeCount == 5f)
+                {
+                    GameController.Instance.AudioManager.PlaySound(_clipName);
+                }
             }
             UIManager.Instance.LoadLoseWindow();
         }

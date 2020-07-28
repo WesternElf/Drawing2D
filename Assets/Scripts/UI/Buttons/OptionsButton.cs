@@ -10,7 +10,8 @@ namespace UserInterface.Buttons
         public override void ChoosedButton()
         {
             UIManager.Instance.InstantiateScreen(panelPrefab);
-            GameController.Instance.GameState = GameState.Pause;
+            GameController.Instance.PauseGame();
+            
         }
     }
 }

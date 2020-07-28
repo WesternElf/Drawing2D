@@ -10,7 +10,7 @@ namespace UserInterface.Buttons
         public override void ChoosedButton()
         {
             UIManager.Instance.CloseScreen(panelPrefab);
-            GameController.Instance.GameState = GameState.Play;
+            GameController.Instance.ResumeGame();
         }
     }
 }

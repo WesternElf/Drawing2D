@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using CoinPool;
+using Audio;
 using LoadSaveData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,11 +20,14 @@ namespace GameControl
 {
     public class GameController : MonoBehaviour
     {
+        [SerializeField] private AudioManager _audioManager;
         public Action OnStateChanged;
         public Action OnRestartedGame;
         private static GameController _instance;
         private DrawState _drawState;
         private GameState _gameState;
+        private GameParameters _soundParams;
+
 
         public static GameController Instance
         {
@@ -54,13 +56,15 @@ namespace GameControl
                 {
                     Time.timeScale = 1.0f;
                     UIManager.Instance.ActivatingButtons(true);
-                    
+               
+
                 }
                 else
                 {
                     Time.timeScale = 0.0f;
                     UIManager.Instance.ActivatingButtons(false);
                     DrawState = DrawState.Draw;
+                    AudioManager.PlayMusic(true);
                 }
 
                 _gameState = value;
@@ -68,19 +72,73 @@ namespace GameControl
         }
 
         public DrawState DrawState { get => _drawState; internal set => _drawState = value; }
+        public AudioManager AudioManager { get => _audioManager; private set => _audioManager = value; }
+        public GameParameters SoundParams { get => _soundParams; set => _soundParams = value; }
+
+
+        private void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+            }
+            else
+            {
+                if (_instance != this)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
+            DontDestroyOnLoad(gameObject);
+        }
 
         private void Start()
         {
-            //DontDestroyOnLoad(this);
             EraserToggle.OnToggleClicked += ChangeDrawState;
+            AudioManager.PlayMusic(true);
+            InitializeSounds();
+        }
+
+        public void InitializeSounds()
+        {
+
+            var loadedData = LoadSaveToJSON.LoadParams();
+
+            if (loadedData != null)
+            {
+                SoundParams = loadedData;
+            }
+            else
+            {
+                SoundParams = new GameParameters();
+            }
+
+            AudioManager.MusicVolume = SoundParams.MusicVolume / 100;
+            AudioManager.SfxVolume = SoundParams.SoundVolume / 100;
+
+            print(AudioManager.MusicVolume);
+            print(AudioManager.SfxVolume);
         }
 
         public void RestartGame()
         {
             GameState = GameState.Play;
+            AudioManager.PlayMusic(true);
             SceneManager.LoadScene(0);
             LoadSaveToJSON.ClearAllData();
-            //OnRestartedGame?.Invoke();
+        }
+
+        public void PauseGame()
+        {
+            GameState = GameState.Pause;
+            AudioManager.PlayMusic(false);
+        }
+
+        public void ResumeGame()
+        {
+            Instance.GameState = GameState.Play;
+            AudioManager.PlayMusic(true);
         }
 
         private void ChangeDrawState()

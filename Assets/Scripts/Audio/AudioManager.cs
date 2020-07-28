@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Audio;
 
 namespace Audio
 {
@@ -9,10 +8,10 @@ namespace Audio
         [SerializeField] private AudioClip[] _sounds;
         [SerializeField] private AudioClip _defaultClip;
         [SerializeField] private AudioClip _gameMusic;
-        [SerializeField] private AudioMixer _mixer;
+        [SerializeField] private AudioClip _menuMusic;
 
-        private AudioSource _sourceSFX;
-        private AudioSource _sourceMusic;
+        [SerializeField] private AudioSource _sourceSFX;
+        [SerializeField] private AudioSource _sourceMusic;
         private float _musicVolume = 1f;                                     
         private float _sfxVolume = 1f;
 
@@ -45,13 +44,39 @@ namespace Audio
             }
         }
 
-        public void PlayMusic(bool playState)                                                    
+        private AudioClip GetSound(string clipName)                                         //поиск звука в массиве
         {
-            if (playState)
+            for (int i = 0; i < _sounds.Length; i++)
+            {
+                if (_sounds[i].name == clipName)
+                {
+                    return _sounds[i];
+                }
+            }
+            return _defaultClip;
+        }
+
+
+        public void PlaySound(string clipName)                                             
+        {
+            SourceSFX.PlayOneShot(GetSound(clipName), SfxVolume);
+        }
+
+        public void StopMusic()
+        {
+            SourceMusic.Pause();
+        }
+
+        public void PlayMusic(bool inGame)                                                    
+        {
+            if (inGame)
             {
                 SourceMusic.clip = _gameMusic;
             }
-
+            else if (!inGame)
+            {
+                SourceMusic.clip = _menuMusic;
+            }
             SourceMusic.volume = MusicVolume;
             SourceMusic.loop = true;
             SourceMusic.Play();
