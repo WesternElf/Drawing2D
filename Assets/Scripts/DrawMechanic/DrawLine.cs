@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Extensions;
 using GameControl;
 using UnityEngine;
@@ -8,73 +9,90 @@ namespace DrawMechanic
 {
     public class DrawLine : MonoBehaviour
     {
+        public Action OnDrawStarted;
+
+        private static DrawLine _instance;
+
         [SerializeField] private GameObject _linePrefab;
         [SerializeField] private GameObject _currentLine;
         [SerializeField] private List<Vector2> _fingerPositions;
+        [SerializeField] private  float maxMouseDistance = 500f;
 
         private EdgeCollider2D _lineCollider;
         private LineRenderer _lineRenderer;
         private Vector2 _tempFingerPos;
         private int _currentPoint;
 
+        private float mouseDistance = 0f;
+        private bool trackMouse = false;
+        private Vector3 lastPosition;
+
+        public float MouseDistance => mouseDistance;
+        public float MaxMouseDistance => maxMouseDistance;
+
+        public static DrawLine Instance => _instance;
+
+        private void Awake()
+        {
+            _instance = this;
+        }
+
         private void Start()
         {
-            //InputControl.OnTouchMoved += StateControl;
-            //InputControl.OnTouchBegan += CreateLine;
-            UpdateManager.Instance.OnUpdateEvent += DrawLines;
+            UpdateManager.Instance.OnUpdateEvent += StateControl;
         }
 
         private void StateControl()
         {
-            if (GameController.Instance.DrawState == DrawState.Draw )
+            if (GameController.Instance.GameState == GameState.Play)
             {
-                if (!UITouchHandler.IsPointerOverUIElement())
+                if (GameController.Instance.DrawState == DrawState.Draw)
                 {
-                    if (InputControl.Instance.MouseDistance < InputControl.Instance.MaxMouseDistance)
+                    if (!UITouchHandler.IsPointerOverUIElement())
                     {
-                        DrawNewLine();
+                        if (MouseDistance < MaxMouseDistance)
+                        {
+                            DrawLines();
+                        }
                     }
                 }
-            }
-            else if (GameController.Instance.DrawState == DrawState.Erasure)
-            {
-                ErasureLines();
+                else if (GameController.Instance.DrawState == DrawState.Erasure)
+                {
+                    ErasureLines();
+                }
             }
         }
 
         private void DrawLines()
         {
-            if (!UITouchHandler.IsPointerOverUIElement())
+            if (Input.touchCount > 0)
             {
+                Touch touch = Input.GetTouch(0);
 
-                //if (CalculateMousePos.Instance.MouseDistance < CalculateMousePos.Instance.MaxMouseDistance)
-                //{
-                //if (Input.touchCount > 0)
-                //{
-                //    Touch touch = Input.GetTouch(0);
-
-                //    if (touch.phase == TouchPhase.Moved)
-                //    {
-                //        DrawNewLine();
-
-                //    }
-
-                //    if (touch.phase == TouchPhase.Began)
-                //    {
-                //        CreateLine();
-                //    }
-                //}
-                if (GameController.Instance.GameState == GameState.Play)
+                if (touch.phase == TouchPhase.Moved)
                 {
-                    if (Input.GetButtonDown("Fire1"))
-                    {
-                        CreateLine();
-                    }
+                    DrawNewLine();
+                    trackMouse = true;
+                    lastPosition = Input.mousePosition;
+                }
 
-                    if (Input.GetButton("Fire1"))
-                    {
-                        DrawNewLine();
-                    }
+                if (touch.phase == TouchPhase.Began)
+                {
+                    CreateLine();
+                }
+
+                if (touch.phase == TouchPhase.Ended)
+                {
+                    trackMouse = false;
+                    mouseDistance = 0f;
+                }
+
+                if (trackMouse)
+                {
+                    OnDrawStarted?.Invoke();
+                    var newPosition = Input.mousePosition;
+                    mouseDistance += (newPosition - lastPosition).magnitude;
+                    lastPosition = newPosition;
                 }
 
             }
@@ -84,14 +102,13 @@ namespace DrawMechanic
         {
             var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-            if (hit.collider.name != "Background")
+            if (hit.collider.TryGetComponent(out EdgeCollider2D other))
             {
                 Destroy(hit.collider.gameObject);
-                print(hit.collider);
             }
 
         }
-
+        
         private void DrawNewLine()
         {
             _tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -99,7 +116,7 @@ namespace DrawMechanic
             if (Vector2.Distance(_tempFingerPos, _fingerPositions[_fingerPositions.Count - 1]) > 0.1f)
             {
                 RaycastHit2D hit = Physics2D.Raycast(_tempFingerPos, Vector2.zero);
-                if (hit.collider != null)
+                if (hit.collider.name == "Background")
                 {
                     UpdateLine(_tempFingerPos);
                 }
@@ -149,11 +166,6 @@ namespace DrawMechanic
                 _lineRenderer.SetPosition(i, _fingerPositions[i]);
             }
         }
-
-        //private void OnDisable()
-        //{
-        //    UpdateManager.Instance.OnUpdateEvent -= InputControl;
-        //}
     }
 
 }

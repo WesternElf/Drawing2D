@@ -501,8 +501,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8beecc6e8a511c4ca6557beb08a470b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settingsWindow: {fileID: 5008414464674399014, guid: f9963f8be0a18434fbbd3df74b801bb1,
+  openedWindow: {fileID: 5008414464674399014, guid: f9963f8be0a18434fbbd3df74b801bb1,
     type: 3}
+  closedWindow: {fileID: 6986080301576709533}
 --- !u!1 &6986080302277267841
 GameObject:
   m_ObjectHideFlags: 0

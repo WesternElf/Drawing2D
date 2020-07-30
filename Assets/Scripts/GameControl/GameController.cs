@@ -56,14 +56,13 @@ namespace GameControl
                 {
                     Time.timeScale = 1.0f;
                     UIManager.Instance.ActivatingButtons(true);
-               
-
+                    DrawState = DrawState.Draw;
                 }
                 else
                 {
                     Time.timeScale = 0.0f;
                     UIManager.Instance.ActivatingButtons(false);
-                    DrawState = DrawState.Draw;
+
                     AudioManager.PlayMusic(true);
                 }
 
@@ -95,7 +94,6 @@ namespace GameControl
 
         private void Start()
         {
-            EraserToggle.OnToggleClicked += ChangeDrawState;
             AudioManager.PlayMusic(true);
             InitializeSounds();
         }
@@ -116,17 +114,14 @@ namespace GameControl
 
             AudioManager.MusicVolume = SoundParams.MusicVolume / 100;
             AudioManager.SfxVolume = SoundParams.SoundVolume / 100;
-
-            print(AudioManager.MusicVolume);
-            print(AudioManager.SfxVolume);
         }
 
         public void RestartGame()
         {
+            LoadSaveToJSON.ClearAllData();
+            SceneManager.LoadScene(0);
             GameState = GameState.Play;
             AudioManager.PlayMusic(true);
-            SceneManager.LoadScene(0);
-            LoadSaveToJSON.ClearAllData();
         }
 
         public void PauseGame()
@@ -141,10 +136,6 @@ namespace GameControl
             AudioManager.PlayMusic(true);
         }
 
-        private void ChangeDrawState()
-        {
-            OnStateChanged?.Invoke();
-        }
 
         public void ChangeNewColor(Color color)
         {
@@ -161,10 +152,6 @@ namespace GameControl
             lineRenderer.colorGradient = gradient;
         }
 
-        private void OnDisabled()
-        {
-            EraserToggle.OnToggleClicked -= ChangeDrawState;
-        }
 
     }
 }

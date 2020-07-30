@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4426227017308220041}
   - component: {fileID: 4426227017308220042}
-  - component: {fileID: 4426227017308220040}
   - component: {fileID: 4426227017308220039}
   - component: {fileID: 4426227017308220038}
   m_Layer: 0
@@ -59,19 +58,6 @@ MonoBehaviour:
     _menuMusic: {fileID: 8300000, guid: b3388004b863d7645b06285ffab7e918, type: 3}
     _sourceSFX: {fileID: 4426227017308220038}
     _sourceMusic: {fileID: 4426227017308220039}
---- !u!114 &4426227017308220040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4426227017308220043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d708c1e6cb145ab40b17b196f8ddfe17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxMouseDistance: 500
 --- !u!82 &4426227017308220039
 AudioSource:
   m_ObjectHideFlags: 0

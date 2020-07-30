@@ -13,6 +13,7 @@ namespace UserInterface.Buttons
         private void Start()
         {
             _eraserToggle = gameObject.GetComponent<Toggle>();
+            _eraserToggle.isOn = true;
             _eraserToggle.onValueChanged.AddListener(delegate { EraserClicked(_eraserToggle); });
         }
 

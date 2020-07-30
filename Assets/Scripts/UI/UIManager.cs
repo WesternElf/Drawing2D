@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using CoinPool;
 using Extensions;
 using GameControl;
@@ -62,6 +63,7 @@ namespace UserInterface
             GameController.Instance.AudioManager.PlaySound(audioName);
 
         }
+
 
         internal void ActivatingButtons(bool activeStatus)
         {

@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+﻿using GameControl;
+using UnityEngine;
 
 namespace UserInterface.Buttons
 {
     public class OpenSettingsButton : BaseButton
     {
-        [SerializeField] private GameObject settingsWindow;
+        [SerializeField] private GameObject openedWindow;
+        [SerializeField] private GameObject closedWindow;
 
         public override void ChoosedButton()
         {
-            UIManager.Instance.CloseScreen(GameObject.Find("OptionsPanel"));
-            UIManager.Instance.InstantiateScreen(settingsWindow);
+            UIManager.Instance.CloseScreen(closedWindow);
+            UIManager.Instance.InstantiateScreen(openedWindow);
+    
         }
     }
 }
