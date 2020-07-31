@@ -9,33 +9,18 @@ namespace DrawMechanic
 {
     public class DrawLine : MonoBehaviour
     {
-        public Action OnDrawStarted;
-
-        private static DrawLine _instance;
+        public static Action OnDrawStarted;
 
         [SerializeField] private GameObject _linePrefab;
         [SerializeField] private GameObject _currentLine;
         [SerializeField] private List<Vector2> _fingerPositions;
-        [SerializeField] private  float maxMouseDistance = 500f;
 
         private EdgeCollider2D _lineCollider;
         private LineRenderer _lineRenderer;
         private Vector2 _tempFingerPos;
         private int _currentPoint;
-
-        private float mouseDistance = 0f;
         private bool trackMouse = false;
-        private Vector3 lastPosition;
-
-        public float MouseDistance => mouseDistance;
-        public float MaxMouseDistance => maxMouseDistance;
-
-        public static DrawLine Instance => _instance;
-
-        private void Awake()
-        {
-            _instance = this;
-        }
+        private Vector2 lastPosition;
 
         private void Start()
         {
@@ -50,16 +35,14 @@ namespace DrawMechanic
                 {
                     if (!UITouchHandler.IsPointerOverUIElement())
                     {
-                        if (MouseDistance < MaxMouseDistance)
-                        {
-                            DrawLines();
-                        }
+                        DrawLines();
                     }
                 }
                 else if (GameController.Instance.DrawState == DrawState.Erasure)
                 {
                     ErasureLines();
                 }
+
             }
         }
 
@@ -71,9 +54,13 @@ namespace DrawMechanic
 
                 if (touch.phase == TouchPhase.Moved)
                 {
-                    DrawNewLine();
-                    trackMouse = true;
-                    lastPosition = Input.mousePosition;
+                    if (GameController.Instance.MouseDistance < 100f)
+                    {
+                        DrawNewLine();
+                        trackMouse = true;
+                        lastPosition = Input.mousePosition;
+                    }
+                   
                 }
 
                 if (touch.phase == TouchPhase.Began)
@@ -84,15 +71,16 @@ namespace DrawMechanic
                 if (touch.phase == TouchPhase.Ended)
                 {
                     trackMouse = false;
-                    mouseDistance = 0f;
+                    GameController.Instance.MouseDistance = 0f;
                 }
 
                 if (trackMouse)
                 {
                     OnDrawStarted?.Invoke();
-                    var newPosition = Input.mousePosition;
-                    mouseDistance += (newPosition - lastPosition).magnitude;
+                    var newPosition = touch.position;
+                    GameController.Instance.MouseDistance += (newPosition - lastPosition).magnitude;
                     lastPosition = newPosition;
+                    print(GameController.Instance.MouseDistance);
                 }
 
             }
@@ -111,14 +99,19 @@ namespace DrawMechanic
         
         private void DrawNewLine()
         {
-            _tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            if (Vector2.Distance(_tempFingerPos, _fingerPositions[_fingerPositions.Count - 1]) > 0.1f)
+            if (Input.touchCount > 0)
             {
-                RaycastHit2D hit = Physics2D.Raycast(_tempFingerPos, Vector2.zero);
-                if (hit.collider.name == "Background")
+                Touch touch = Input.GetTouch(0);
+                _tempFingerPos = Camera.main.ScreenToWorldPoint(touch.position);
+                var dis = Vector2.Distance(_tempFingerPos, _fingerPositions[_fingerPositions.Count - 1]);
+                if ( dis > 0.1f && dis < 2f)
                 {
-                    UpdateLine(_tempFingerPos);
+                    RaycastHit2D hit = Physics2D.Raycast(_tempFingerPos, Vector2.zero);
+                    if (hit.collider.name == "Background")
+                    {
+                        UpdateLine(_tempFingerPos);
+                    }
                 }
             }
         }

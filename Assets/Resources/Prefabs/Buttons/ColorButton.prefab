@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8772363759088716992}
   - component: {fileID: 8772363759088716993}
   - component: {fileID: 5838736355616783737}
+  - component: {fileID: 1003341479699600525}
   m_Layer: 5
   m_Name: ColorButton
   m_TagString: Untagged
@@ -62,6 +63,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -130,3 +132,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abe1fce90cc688a4ca6152a3b65c0ef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1003341479699600525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772363759088717023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 10
+  m_PreferredHeight: 10
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1

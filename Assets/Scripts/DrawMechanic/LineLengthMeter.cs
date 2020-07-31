@@ -11,21 +11,21 @@ namespace DrawMechanic
         private void Start()
         {
             _lineLengthImg = gameObject.GetComponent<Image>();
-            DrawLine.Instance.OnDrawStarted += UpdateLength;
+            DrawLine.OnDrawStarted += UpdateLength;
         }
 
         private void UpdateLength()
         {
             if (GameController.Instance.DrawState == DrawState.Draw)
             {
-                _lineLengthImg.fillAmount = 1 - (DrawLine.Instance.MouseDistance / DrawLine.Instance.MaxMouseDistance);
+                _lineLengthImg.fillAmount = 1 - (GameController.Instance.MouseDistance / GameController.Instance.MaxMouseDistance);
             }
 
         }
 
         private void OnDisable()
         {
-            DrawLine.Instance.OnDrawStarted -= UpdateLength;
+            DrawLine.OnDrawStarted -= UpdateLength;
         }
     }
 }

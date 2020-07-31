@@ -15,10 +15,8 @@ namespace UserInterface.Panels
         private void Start()
         {
             _musicSlider.value = GameController.Instance.SoundParams.MusicVolume / 100;
-            print(_musicSlider.value);
 
             _soundSlider.value = GameController.Instance.SoundParams.SoundVolume / 100;
-            print(_soundSlider.value);
         }
 
         public void SetSoundsVolume(float volume)

@@ -58,6 +58,7 @@ MonoBehaviour:
     _menuMusic: {fileID: 8300000, guid: b3388004b863d7645b06285ffab7e918, type: 3}
     _sourceSFX: {fileID: 4426227017308220038}
     _sourceMusic: {fileID: 4426227017308220039}
+  maxMouseDistance: 100
 --- !u!82 &4426227017308220039
 AudioSource:
   m_ObjectHideFlags: 0

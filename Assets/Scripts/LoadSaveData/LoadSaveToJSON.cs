@@ -17,7 +17,6 @@ namespace LoadSaveData
             newJSON.Add(MUSIC_KEY, gameParameters.MusicVolume);
 
             File.WriteAllText(GetFilePath(), newJSON.ToString());
-            Debug.Log(GetFilePath());
         }
 
         public static GameParameters LoadParams()

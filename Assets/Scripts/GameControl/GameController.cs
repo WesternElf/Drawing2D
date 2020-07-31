@@ -21,13 +21,22 @@ namespace GameControl
     public class GameController : MonoBehaviour
     {
         [SerializeField] private AudioManager _audioManager;
+        [SerializeField] private float maxMouseDistance;
         public Action OnStateChanged;
         public Action OnRestartedGame;
         private static GameController _instance;
         private DrawState _drawState;
         private GameState _gameState;
         private GameParameters _soundParams;
+        private float mouseDistance = 0f;
 
+        public float MouseDistance
+        {
+            get { return mouseDistance; }
+            internal set { mouseDistance = value; }
+        }
+
+        public float MaxMouseDistance => maxMouseDistance;
 
         public static GameController Instance
         {
