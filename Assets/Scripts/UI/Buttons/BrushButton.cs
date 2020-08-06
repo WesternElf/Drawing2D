@@ -6,7 +6,7 @@ namespace UserInterface.Buttons
     {
         public static event Action OnBrushClickedEvent;
 
-        public override void ChoosedButton()
+        protected override void ChoosedButton()
         {
             OnBrushClickedEvent?.Invoke();
         }

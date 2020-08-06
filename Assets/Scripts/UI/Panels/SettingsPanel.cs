@@ -7,15 +7,12 @@ namespace UserInterface.Panels
 {
     public class SettingsPanel : MonoBehaviour
     {
-        
         [SerializeField] private Slider _musicSlider;
         [SerializeField] private Slider _soundSlider;
-
 
         private void Start()
         {
             _musicSlider.value = GameController.Instance.SoundParams.MusicVolume / 100;
-
             _soundSlider.value = GameController.Instance.SoundParams.SoundVolume / 100;
         }
 

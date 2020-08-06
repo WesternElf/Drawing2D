@@ -4,7 +4,6 @@ using LoadSaveData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UserInterface;
-using UserInterface.Buttons;
 
 public enum DrawState
 {
@@ -21,7 +20,6 @@ namespace GameControl
     public class GameController : MonoBehaviour
     {
         [SerializeField] private AudioManager _audioManager;
-        [SerializeField] private float maxMouseDistance;
         public Action OnStateChanged;
         public Action OnRestartedGame;
         private static GameController _instance;
@@ -29,14 +27,6 @@ namespace GameControl
         private GameState _gameState;
         private GameParameters _soundParams;
         private float mouseDistance = 0f;
-
-        public float MouseDistance
-        {
-            get { return mouseDistance; }
-            internal set { mouseDistance = value; }
-        }
-
-        public float MaxMouseDistance => maxMouseDistance;
 
         public static GameController Instance
         {
@@ -70,7 +60,7 @@ namespace GameControl
                 else
                 {
                     Time.timeScale = 0.0f;
-                    UIManager.Instance.ActivatingButtons(false);
+                 
 
                     AudioManager.PlayMusic(true);
                 }
@@ -97,12 +87,12 @@ namespace GameControl
                     Destroy(gameObject);
                 }
             }
-
             DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
         {
+            GameState = GameState.Play;
             AudioManager.PlayMusic(true);
             InitializeSounds();
         }
@@ -135,6 +125,7 @@ namespace GameControl
 
         public void PauseGame()
         {
+            UIManager.Instance.ActivatingButtons(false);
             GameState = GameState.Pause;
             AudioManager.PlayMusic(false);
         }

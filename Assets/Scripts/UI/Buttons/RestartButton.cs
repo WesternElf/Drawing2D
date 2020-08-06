@@ -9,7 +9,7 @@ namespace UserInterface.Buttons
     {
         [SerializeField] private GameObject panelPrefab;
 
-        public override void ChoosedButton()
+        protected override void ChoosedButton()
         {
             UIManager.Instance.CloseScreen(panelPrefab);
             GameController.Instance.RestartGame();

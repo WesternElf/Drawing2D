@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Extensions;
 using GameControl;
 using UnityEngine;
+using UnityEngine.UI;
 using UserInterface;
 
 namespace DrawMechanic
@@ -11,10 +12,12 @@ namespace DrawMechanic
     {
         public static Action OnDrawStarted;
 
+        [SerializeField] private Image _lineLengthImg;
         [SerializeField] private GameObject _linePrefab;
         [SerializeField] private GameObject _currentLine;
         [SerializeField] private List<Vector2> _fingerPositions;
 
+        private float _mouseDistance;
         private EdgeCollider2D _lineCollider;
         private LineRenderer _lineRenderer;
         private Vector2 _tempFingerPos;
@@ -36,6 +39,7 @@ namespace DrawMechanic
                     if (!UITouchHandler.IsPointerOverUIElement())
                     {
                         DrawLines();
+                        _lineLengthImg.fillAmount = 1 - (_mouseDistance / 100f);
                     }
                 }
                 else if (GameController.Instance.DrawState == DrawState.Erasure)
@@ -54,7 +58,7 @@ namespace DrawMechanic
 
                 if (touch.phase == TouchPhase.Moved)
                 {
-                    if (GameController.Instance.MouseDistance < 100f)
+                    if (_mouseDistance < 100f)
                     {
                         DrawNewLine();
                         trackMouse = true;
@@ -71,16 +75,15 @@ namespace DrawMechanic
                 if (touch.phase == TouchPhase.Ended)
                 {
                     trackMouse = false;
-                    GameController.Instance.MouseDistance = 0f;
+                    _mouseDistance = 0f;
                 }
 
                 if (trackMouse)
                 {
                     OnDrawStarted?.Invoke();
                     var newPosition = touch.position;
-                    GameController.Instance.MouseDistance += (newPosition - lastPosition).magnitude;
+                    _mouseDistance += (newPosition - lastPosition).magnitude;
                     lastPosition = newPosition;
-                    print(GameController.Instance.MouseDistance);
                 }
 
             }

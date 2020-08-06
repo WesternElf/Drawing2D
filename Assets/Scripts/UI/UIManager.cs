@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using CoinPool;
 using Extensions;
 using GameControl;
 using UnityEngine;
-using UnityEngine.UI;
 using UserInterface.Buttons;
 
 namespace UserInterface
@@ -15,7 +13,7 @@ namespace UserInterface
         [SerializeField] private List<GameObject> _gameButtons;
         [SerializeField] private GameObject _loseWindow;
         [SerializeField] private GameObject _winWindow;
-        
+
         private static UIManager _instance;
         public event Action OnCoinCountChanged;
         private const string _winClipName = "Win";
@@ -61,9 +59,7 @@ namespace UserInterface
             GameController.Instance.GameState = GameState.Pause;
             GameController.Instance.AudioManager.StopMusic();
             GameController.Instance.AudioManager.PlaySound(audioName);
-
         }
-
 
         internal void ActivatingButtons(bool activeStatus)
         {

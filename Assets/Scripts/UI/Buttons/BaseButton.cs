@@ -16,7 +16,7 @@ namespace UserInterface.Buttons
             _button.onClick.AddListener(PlaySound);
         }
 
-        public virtual void ChoosedButton()
+        protected virtual void ChoosedButton()
         {
            
         }

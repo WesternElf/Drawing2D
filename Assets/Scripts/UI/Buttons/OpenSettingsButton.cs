@@ -8,7 +8,7 @@ namespace UserInterface.Buttons
         [SerializeField] private GameObject openedWindow;
         [SerializeField] private GameObject closedWindow;
 
-        public override void ChoosedButton()
+        protected override void ChoosedButton()
         {
             UIManager.Instance.CloseScreen(closedWindow);
             UIManager.Instance.InstantiateScreen(openedWindow);

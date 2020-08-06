@@ -20,7 +20,6 @@ namespace UserInterface.Buttons
         private void EraserClicked(Toggle change)
         {
             OnToggleClicked?.Invoke();
-            print("Toggle clicked" + change.isOn);
         }
     }
 }

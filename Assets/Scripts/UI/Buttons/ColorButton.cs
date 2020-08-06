@@ -9,7 +9,7 @@ namespace UserInterface.Buttons
         public static Color ButtonColor;
         public static event Action OnColorChoosedEvent;
 
-        public override void ChoosedButton()
+        protected override void ChoosedButton()
         {
             ButtonColor = GetColor();
             OnColorChoosedEvent?.Invoke();
