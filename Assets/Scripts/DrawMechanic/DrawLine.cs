@@ -39,7 +39,6 @@ namespace DrawMechanic
                     if (!UITouchHandler.IsPointerOverUIElement())
                     {
                         DrawLines();
-                        _lineLengthImg.fillAmount = 1 - (_mouseDistance / 100f);
                     }
                 }
                 else if (GameController.Instance.DrawState == DrawState.Erasure)
@@ -58,13 +57,9 @@ namespace DrawMechanic
 
                 if (touch.phase == TouchPhase.Moved)
                 {
-                    if (_mouseDistance < 100f)
-                    {
-                        DrawNewLine();
-                        trackMouse = true;
-                        lastPosition = Input.mousePosition;
-                    }
-                   
+                    trackMouse = true;
+                    DrawNewLine();
+                    lastPosition = Input.mousePosition;
                 }
 
                 if (touch.phase == TouchPhase.Began)
@@ -75,14 +70,11 @@ namespace DrawMechanic
                 if (touch.phase == TouchPhase.Ended)
                 {
                     trackMouse = false;
-                    _mouseDistance = 0f;
                 }
 
                 if (trackMouse)
                 {
-                    OnDrawStarted?.Invoke();
                     var newPosition = touch.position;
-                    _mouseDistance += (newPosition - lastPosition).magnitude;
                     lastPosition = newPosition;
                 }
 
