@@ -15,8 +15,6 @@ namespace LoadSaveData
             newJSON.Add(COUNT_KEY, gameParameters.CoinCount);
             newJSON.Add(SOUND_KEY, gameParameters.SoundVolume);
             newJSON.Add(MUSIC_KEY, gameParameters.MusicVolume);
-
-            File.WriteAllText(GetFilePath(), newJSON.ToString());
         }
 
         public static GameParameters LoadParams()
@@ -42,6 +40,5 @@ namespace LoadSaveData
         {
             return Application.persistentDataPath + "/GameSave.json";
         }
-
     }
 }
